@@ -1,5 +1,9 @@
 # 💰 SHIMP - Expense Tracking System
 
+<p align="center">
+  <img src="poster.png" alt="SHIMP Project Poster" width="100%">
+</p>
+
 **SHIMP Expense Tracking System** is a powerful and intuitive Android application designed to help users manage their finances effectively. Built with a focus on real-time data synchronization and visual analytics, it provides a seamless experience for tracking daily income and expenses.
 
 ---
@@ -17,7 +21,7 @@
 
 ### ☁️ Cloud Synchronization
 *   **Firebase Integration:** Powered by **Firebase Realtime Database**, ensuring your data is securely stored in the cloud and synced across devices instantly.
-*   **Reliable Persistence:** Never lose your financial records, even if you switch devices.
+*   **Reliable Persistence:** Never lose your financial records, even if if you switch devices.
 
 ### 🎨 Modern User Experience
 *   **Lottie Animations:** High-quality, smooth animations for a more engaging and responsive interface.
