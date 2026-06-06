@@ -1,10 +1,10 @@
 # 💰 SHIMP - Expense Tracking System
 
 <p align="center">
-  <img src="poster.png" alt="SHIMP Project Poster" width="100%">
+  <img src="Poster.png" alt="SHIMP Project Poster" width="100%">
 </p>
 
-**SHIMP Expense Tracking System** is a powerful and intuitive Android application designed to help users manage their finances effectively. Built with a focus on real-time data synchronization and visual analytics, it provides a seamless experience for tracking daily income and expenses.
+**SHIMP Expense Tracking System** is a powerful and intuitive Android application designed to help users manage their finances effectively. Built with a focus on real-time data synchronization and [...]
 
 ---
 
