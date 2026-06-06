@@ -6,11 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import com.example.expensetrackersystem.DatabaseHandler;
 import com.example.expensetrackersystem.DatabaseHandlerExpense;
 import com.example.expensetrackersystem.R;
@@ -54,10 +58,11 @@ public class Dashboard extends Fragment {
     }
 
     private RecyclerView rv_income, rv_expense;
-    private TextView tv_income, tv_expense;
+    private TextView tv_income, tv_expense, tv_total_balance;
+    private ImageView iv_dashboard_bg;
 
+    private View fab_layout_income, fab_layout_expense;
     FloatingActionButton mAddFab, mAddIncomeFab, mAddExpenseFab;
-    TextView addIncomeText, addExpenseText;
     Boolean isAllFabsVisible;
 
     private incomeAdapter incomeAdapter;
@@ -79,28 +84,25 @@ public class Dashboard extends Fragment {
 
         init(view);
 
+
         databaseHandler = new DatabaseHandler(getContext());
         databaseHandlerExpense = new DatabaseHandlerExpense(getContext());
         fillIncomeModel();
         fillExpenseModel();
+        updateTotalBalance();
 
         mAddFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!isAllFabsVisible) {
-                    mAddIncomeFab.show();
-                    mAddExpenseFab.show();
-                    addExpenseText.setVisibility(View.VISIBLE);
-                    addIncomeText.setVisibility(View.VISIBLE);
-
+                    fab_layout_income.setVisibility(View.VISIBLE);
+                    fab_layout_expense.setVisibility(View.VISIBLE);
+                    mAddFab.animate().rotation(45f).setDuration(200).start();
                     isAllFabsVisible = true;
                 } else {
-
-                    mAddIncomeFab.hide();
-                    mAddExpenseFab.hide();
-                    addExpenseText.setVisibility(View.GONE);
-                    addIncomeText.setVisibility(View.GONE);
-
+                    fab_layout_income.setVisibility(View.GONE);
+                    fab_layout_expense.setVisibility(View.GONE);
+                    mAddFab.animate().rotation(0f).setDuration(200).start();
                     isAllFabsVisible = false;
                 }
             }
@@ -109,18 +111,40 @@ public class Dashboard extends Fragment {
         mAddIncomeFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showIncomeDialog();
+                showIncomeBottomSheet();
+                toggleFabs();
             }
         });
 
         mAddExpenseFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showExpenseDialog();
+                showExpenseBottomSheet();
+                toggleFabs();
             }
         });
 
         return view;
+    }
+
+    private void toggleFabs() {
+        if (isAllFabsVisible) {
+            fab_layout_income.setVisibility(View.GONE);
+            fab_layout_expense.setVisibility(View.GONE);
+            mAddFab.animate().rotation(0f).setDuration(200).start();
+            isAllFabsVisible = false;
+        }
+    }
+
+    private void updateTotalBalance() {
+        try {
+            int income = totalIncome != null ? Integer.parseInt(totalIncome) : 0;
+            int expense = totalExpense != null ? Integer.parseInt(totalExpense) : 0;
+            int balance = income - expense;
+            tv_total_balance.setText("₹ " + balance);
+        } catch (NumberFormatException e) {
+            tv_total_balance.setText("₹ 0");
+        }
     }
 
     private void fillExpenseModel() {
@@ -128,16 +152,21 @@ public class Dashboard extends Fragment {
 
         int total = 0;
         for (expenseModel model : expenseModelList) {
-            total += Integer.parseInt(model.getAmount());
+            try {
+                total += Integer.parseInt(model.getAmount());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
         totalExpense = String.valueOf(total);
-        tv_expense.setText("₹" + totalExpense);
+        tv_expense.setText("₹ " + totalExpense);
 
         expenseAdapter = new expenseAdapter(getContext(), expenseModelList);
         rv_expense.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rv_expense.setHasFixedSize(true);
 
         rv_expense.setAdapter(expenseAdapter);
+        updateTotalBalance();
     }
 
     private void fillIncomeModel() {
@@ -145,116 +174,103 @@ public class Dashboard extends Fragment {
 
         int total = 0;
         for (incomeModel model : incomeModelList) {
-            total += Integer.parseInt(model.getAmount());
+            try {
+                total += Integer.parseInt(model.getAmount());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
         totalIncome = String.valueOf(total);
-        tv_income.setText("₹" + totalIncome);
+        tv_income.setText("₹ " + totalIncome);
 
         incomeAdapter = new incomeAdapter(getContext(), incomeModelList);
         rv_income.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         rv_income.setHasFixedSize(true);
 
         rv_income.setAdapter(incomeAdapter);
-
+        updateTotalBalance();
     }
 
-    private void showIncomeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    private void showIncomeBottomSheet() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+        View dialogView = getLayoutInflater().inflate(R.layout.income_add_litem, null);
+        builder.setView(dialogView);
+        
+        androidx.appcompat.app.AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
-        final View customLayout = getLayoutInflater().inflate(R.layout.income_add_litem, null);
-        EditText et_income = customLayout.findViewById(R.id.et_incomeAmount);
-        EditText et_type = customLayout.findViewById(R.id.et_incomeType);
-        EditText et_note = customLayout.findViewById(R.id.et_incomeNote);
+        EditText et_income = dialogView.findViewById(R.id.et_incomeAmount);
+        EditText et_type = dialogView.findViewById(R.id.et_incomeType);
+        EditText et_note = dialogView.findViewById(R.id.et_incomeNote);
 
-        Button btn_save = customLayout.findViewById(R.id.btn_save);
-        Button btn_cancel = customLayout.findViewById(R.id.btn_cancel);
+        Button btn_save = dialogView.findViewById(R.id.btn_save);
+        Button btn_cancel = dialogView.findViewById(R.id.btn_cancel);
 
-        builder.setView(customLayout);
-        AlertDialog alertDialog = builder.create();
+        dialog.show();
 
-        alertDialog.show();
+        btn_cancel.setOnClickListener(v -> dialog.dismiss());
 
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
+        btn_save.setOnClickListener(v -> {
+            String amount = et_income.getText().toString();
+            String type = et_type.getText().toString();
+            String note = et_note.getText().toString();
+            long date = System.currentTimeMillis();
+
+            if (amount.isEmpty()) {
+                et_income.setError("Empty amount");
+            } else if (type.isEmpty()) {
+                et_type.setError("Empty Type");
+            } else if (note.isEmpty()) {
+                et_note.setError("Empty note");
+            } else {
+                databaseHandler.addData(amount, type, note, String.valueOf(date));
+                dialog.dismiss();
+                fillIncomeModel();
             }
         });
-
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String amount = et_income.getText().toString();
-                String type = et_type.getText().toString();
-                String note = et_note.getText().toString();
-                long date = System.currentTimeMillis();
-
-                if (amount.isEmpty()) {
-                    et_income.setError("Empty amount");
-                    return;
-                } else if (type.isEmpty()) {
-                    et_type.setError("Empty Type");
-                    return;
-                } else if (note.isEmpty()) {
-                    et_note.setError("Empty note");
-                    return;
-                } else {
-                    databaseHandler.addData(amount, type, note, String.valueOf(date));
-                    alertDialog.dismiss();
-                    fillIncomeModel();
-                }
-
-            }
-        });
-
     }
 
-    private void showExpenseDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    private void showExpenseBottomSheet() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+        View dialogView = getLayoutInflater().inflate(R.layout.expense_add_item, null);
+        builder.setView(dialogView);
 
-        final View customLayout = getLayoutInflater().inflate(R.layout.expense_add_item, null);
-        EditText et_income = customLayout.findViewById(R.id.et_incomeAmount);
-        EditText et_type = customLayout.findViewById(R.id.et_incomeType);
-        EditText et_note = customLayout.findViewById(R.id.et_incomeNote);
+        androidx.appcompat.app.AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
-        Button btn_save = customLayout.findViewById(R.id.btn_save);
-        Button btn_cancel = customLayout.findViewById(R.id.btn_cancel);
+        EditText et_income = dialogView.findViewById(R.id.et_incomeAmount);
+        EditText et_type = dialogView.findViewById(R.id.et_incomeType);
+        EditText et_note = dialogView.findViewById(R.id.et_incomeNote);
 
-        builder.setView(customLayout);
-        AlertDialog alertDialog = builder.create();
+        Button btn_save = dialogView.findViewById(R.id.btn_save);
+        Button btn_cancel = dialogView.findViewById(R.id.btn_cancel);
 
-        alertDialog.show();
+        dialog.show();
 
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
+        btn_cancel.setOnClickListener(v -> dialog.dismiss());
+
+        btn_save.setOnClickListener(v -> {
+            String amount = et_income.getText().toString();
+            String type = et_type.getText().toString();
+            String note = et_note.getText().toString();
+            long date = System.currentTimeMillis();
+
+            if (amount.isEmpty()) {
+                et_income.setError("Empty amount");
+            } else if (type.isEmpty()) {
+                et_type.setError("Empty Type");
+            } else if (note.isEmpty()) {
+                et_note.setError("Empty note");
+            } else {
+                databaseHandlerExpense.addData(amount, type, note, String.valueOf(date));
+                dialog.dismiss();
+                fillExpenseModel();
             }
         });
-
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String amount = et_income.getText().toString();
-                String type = et_type.getText().toString();
-                String note = et_note.getText().toString();
-                long date = System.currentTimeMillis();
-
-                if (amount.isEmpty()) {
-                    et_income.setError("Empty amount");
-                } else if (type.isEmpty()) {
-                    et_type.setError("Empty Type");
-                } else if (note.isEmpty()) {
-                    et_note.setError("Empty note");
-                } else {
-                    databaseHandlerExpense.addData(amount, type, note, String.valueOf(date));
-                    alertDialog.dismiss();
-                    fillExpenseModel();
-                }
-
-            }
-        });
-
     }
 
     private void init(View root) {
@@ -263,22 +279,18 @@ public class Dashboard extends Fragment {
 
         tv_income = root.findViewById(R.id.tv_income);
         tv_expense = root.findViewById(R.id.tv_expense);
-
-        tv_income.setText("Rs. 11000");
-        tv_expense.setText("Rs. 8000");
+        tv_total_balance = root.findViewById(R.id.tv_total_balance);
+        iv_dashboard_bg = root.findViewById(R.id.iv_dashboard_bg);
 
         mAddFab = root.findViewById(R.id.add_fab);
         mAddIncomeFab = root.findViewById(R.id.add_income_fab);
         mAddExpenseFab = root.findViewById(R.id.add_expense_fab);
 
-        addIncomeText = root.findViewById(R.id.add_income_text);
-        addExpenseText = root.findViewById(R.id.add_expense_text);
+        fab_layout_income = root.findViewById(R.id.fab_layout_income);
+        fab_layout_expense = root.findViewById(R.id.fab_layout_expense);
 
-        mAddIncomeFab.setVisibility(View.GONE);
-        mAddExpenseFab.setVisibility(View.GONE);
-        addIncomeText.setVisibility(View.GONE);
-        addExpenseText.setVisibility(View.GONE);
-
+        totalIncome = "0";
+        totalExpense = "0";
         isAllFabsVisible = false;
     }
 

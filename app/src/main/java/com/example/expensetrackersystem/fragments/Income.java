@@ -101,7 +101,11 @@ public class Income extends Fragment {
         incomeModelList = databaseHandler.getAllIncome();
         int total = 0;
         for (incomeModel model : incomeModelList) {
-            total += Integer.parseInt(model.getAmount());
+            try {
+                total += Integer.parseInt(model.getAmount());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
         totalIncome = String.valueOf(total);
         tvIncome.setText("₹" + totalIncome);

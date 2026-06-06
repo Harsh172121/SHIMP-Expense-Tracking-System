@@ -79,6 +79,10 @@ public class incomeAdapter2 extends RecyclerView.Adapter<incomeAdapter2.viewhold
         builder.setView(customLayout);
         AlertDialog alertDialog = builder.create();
 
+        if (alertDialog.getWindow() != null) {
+            alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
         alertDialog.show();
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {

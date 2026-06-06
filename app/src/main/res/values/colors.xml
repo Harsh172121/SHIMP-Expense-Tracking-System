@@ -8,28 +8,29 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="background">#FFFFFFFF</color>
-    <color name="textColor">#FF000000</color>
-    <color name="textColor2">#FF000000</color>
-    <color name="light_blue">#2a54f4</color>
+    <!-- Professional Palette -->
+    <color name="background_light">#F8F9FA</color>
+    <color name="background_dark">#121212</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_dark">#1E1E1E</color>
+    
+    <!-- Semantic Colors -->
+    <color name="income_green">#2ECC71</color>
+    <color name="expense_red">#E74C3C</color>
+    <color name="accent_blue">#3498DB</color>
+    <color name="accent_blue_dark">#2980B9</color>
 
-    <color name="blue">#3500D3</color>
-    <color name="grey">#808080</color>
-    <color name="dark_grey">#2D2D2D</color>
-    <color name="darker_grey">#080808</color>
+    <!-- Text Colors -->
+    <color name="text_primary">#2C3E50</color>
+    <color name="text_secondary">#7F8C8D</color>
+    <color name="text_on_accent">#FFFFFF</color>
+    <color name="grey">#95A5A6</color>
 
-    <color name="background2">#FFFFFFFF</color>
-    <color name="background3">#808080</color>
-    <color name="background4">#ef0148</color>
-    <color name="background5">#ef0148</color>
-    <color name="background6">#FFFFFFFF</color>
-
-    <color name="textGreen">#ef0148</color>
-    <color name="light_pink">#fc327e</color>
-    <color name="light_green">#1ac831</color>
-    <color name="light_yellow">#ffac30</color>
-    <color name="light_purple">#cd06ff</color>
-    <color name="light_orange">#f66224</color>
-    <color name="light_red">#ef0148</color>
-    <color name="dark_green">#CDC733</color>
+    <!-- Legacy / Mappings for compatibility -->
+    <color name="background">@color/background_light</color>
+    <color name="textColor">@color/text_primary</color>
+    <color name="light_green">@color/income_green</color>
+    <color name="light_red">@color/expense_red</color>
+    <color name="background4">@color/expense_red</color>
+    <color name="background5">@color/expense_red</color>
 </resources>

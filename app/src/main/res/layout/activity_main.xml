@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/ds"
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -25,11 +26,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:elevation="3dp"
-        android:fitsSystemWindows="true"
-        app:itemBackground="@color/black"
-        app:itemIconTint="@drawable/tab_color"
-        app:itemTextColor="@drawable/tab_color"
+        app:backgroundTint="@color/surface_light"
+        app:itemIconTint="@color/accent_blue"
+        app:itemTextColor="@color/text_primary"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/menu" />
 
 </RelativeLayout>

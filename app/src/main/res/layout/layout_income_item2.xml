@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tv_incomeDate"
-            android:layout_width="70dp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Jun 28,2023"
-            android:textColor="@color/light_green"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_incomeType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="28dp"
-            android:layout_toRightOf="@id/tv_incomeDate"
-            android:text="Job"
-            android:textColor="@color/light_green"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_incomeType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Job"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tv_incomeNote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_incomeType"
-            android:layout_marginLeft="28dp"
-            android:layout_toRightOf="@id/tv_incomeDate"
-            android:text="Extra Income"
-            android:textColor="@color/light_green"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_incomeNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extra Income"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_incomeDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Jun 28, 2023"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_incomeAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="24dp"
-            android:text="4800"
-            android:textColor="@color/light_green"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:fontFamily="sans-serif-black"
+            android:text="₹ 4800"
+            android:textColor="@color/income_green"
+            android:textSize="20sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-</RelativeLayout>
+</androidx.cardview.widget.CardView>

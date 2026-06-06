@@ -69,12 +69,16 @@ public class PieChartIncome extends AppCompatActivity {
 
         map = new HashMap<>();
         for (incomeModel model : incomeModelList) {
-            int amount = Integer.parseInt(model.getAmount());
-            if (map.containsKey(model.getType())) {
-                int a = Integer.parseInt(map.get(model.getType()));
-                map.put(model.getType(), String.valueOf(a + amount));
-            } else {
-                map.put(model.getType(), model.getAmount());
+            try {
+                int amount = Integer.parseInt(model.getAmount());
+                if (map.containsKey(model.getType())) {
+                    int a = Integer.parseInt(map.get(model.getType()));
+                    map.put(model.getType(), String.valueOf(a + amount));
+                } else {
+                    map.put(model.getType(), model.getAmount());
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -94,15 +98,23 @@ public class PieChartIncome extends AppCompatActivity {
 
         int totalAmount = 0;
         for (String type : xData) {
-            totalAmount += Integer.parseInt(map.get(type));
+            try {
+                totalAmount += Integer.parseInt(map.get(type));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
 
         int i = 0;
         for (String type : xData) {
-            int amount = Integer.parseInt(map.get(type));
-            float percentage = (float) amount / totalAmount * 100;
-            pieData.add(new SliceValue(amount, colors.get(i % 5)).setLabel(type + " (" + String.format("%.2f", percentage) + "%)"));
-            i++;
+            try {
+                int amount = Integer.parseInt(map.get(type));
+                float percentage = totalAmount > 0 ? (float) amount / totalAmount * 100 : 0;
+                pieData.add(new SliceValue(amount, colors.get(i % 5)).setLabel(type + " (" + String.format("%.2f", percentage) + "%)"));
+                i++;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

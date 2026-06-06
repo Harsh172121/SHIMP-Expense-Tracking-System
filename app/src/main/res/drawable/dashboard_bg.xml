@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Main Gradient Background -->
+    <item>
+        <shape>
+            <gradient
+                android:angle="135"
+                android:endColor="#F0F4F8"
+                android:startColor="#FFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Decorative Top Shape -->
+    <item
+        android:top="-200dp"
+        android:left="-100dp"
+        android:right="-100dp">
+        <shape android:shape="oval">
+            <solid android:color="#0D3498DB" /> <!-- Very transparent accent blue -->
+        </shape>
+    </item>
+</layer-list>

@@ -100,7 +100,11 @@ public class Expense extends Fragment {
         expenseModelList = databaseHandlerExpense.getAllExpense();
         int total = 0;
         for (expenseModel model : expenseModelList) {
-            total += Integer.parseInt(model.getAmount());
+            try {
+                total += Integer.parseInt(model.getAmount());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
         totalExpense = String.valueOf(total);
         tvExpense.setText("₹" + totalExpense);

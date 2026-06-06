@@ -1,82 +1,86 @@
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/img_1"
+    android:background="@drawable/ds"
+    android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".fragments.Income">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tv_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_centerHorizontal="true"
-        android:text="SHIMP Expense Tracking"
-        android:textColor="@color/white"
-        android:textSize="30sp" />
-
-    <!-- Subtitle -->
-    <TextView
-        android:id="@+id/tv_text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="20dp"
-        android:text="Income"
-        android:textColor="@color/white"
-        android:textSize="28sp" />
-
-    <!-- Income Card -->
-    <LinearLayout
-        android:id="@+id/ll"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_text2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+
+        android:layout_marginBottom="24dp">
 
         <TextView
+            android:id="@+id/tv_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Income"
-            android:textColor="@color/light_green"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/tv_income"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="Rs. 10000.00"
-            android:textColor="@color/light_green"
-            android:textSize="24sp" />
+            android:fontFamily="sans-serif-medium"
+            android:text="Income Analytics"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/iv_expensePie"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_baseline_pie_chart_24"
-            app:tint="@color/purple_200" />
+            app:tint="@color/accent_blue" />
+    </RelativeLayout>
 
-    </LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp">
 
-    <!-- Income List -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Monthly Income"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="₹ 0.00"
+                android:textColor="@color/income_green"
+                android:textSize="28sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="All Transactions"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_income"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll"
-        android:layout_marginTop="30dp"
-        android:scrollbars="horizontal"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         tools:listitem="@layout/layout_income_item2" />
 
-</RelativeLayout>
+</LinearLayout>
